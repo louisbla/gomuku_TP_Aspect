@@ -1,10 +1,13 @@
 
 import ca.uqac.gomoku.core.Player;
 import ca.uqac.gomoku.core.model.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public aspect FinJeu {
 	boolean stop = false;
+	List<Spot> spotWin = new ArrayList<>();
 
 	/*pointcut callNotifyGameOver() : call(void notifyGameOver(Player));
 
@@ -18,18 +21,6 @@ public aspect FinJeu {
 	after() returning (boolean retBool): callIsWon() {
 		stop = retBool;
     }
-	
-	pointcut callShowWinner(List<Spot> winStones) : (set(List<Spot> Grid.winningStones) ) && args(winStones);
-	
-	after(List<Spot> winStones): callShowWinner(winStones){
-		if(!winStones.isEmpty()) {
-			System.out.println("Pierres gagnantes :");
-			for (Spot spot : winStones) {
-				System.out.println("["+spot.x+","+spot.y+"]");
-			}
-		}
-	}
-	
 
 	pointcut callSpotClicked() : call(void *spotClicked(Spot));
 
@@ -40,4 +31,21 @@ public aspect FinJeu {
 			proceed();
 		}
     }
+	
+	/**==================================Affichage de la combinaison gagnante============================================================= */
+	
+	pointcut getSpotWin(List<Spot> winStones) : (set(List<Spot> Grid.winningStones) ) && args(winStones);
+	
+	after(List<Spot> winStones): getSpotWin(winStones){
+		spotWin = winStones;
+	}
+	
+	pointcut afficherSpotWin() : call (void notifyGameOver(Player));
+	
+	after() : afficherSpotWin(){
+		System.out.println("Pierres gagnantes :");
+		for (Spot spot : spotWin) {
+			System.out.println("["+spot.x+","+spot.y+"]");
+		}
+	}
 }
