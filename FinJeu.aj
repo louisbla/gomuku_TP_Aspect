@@ -22,7 +22,7 @@ public aspect FinJeu {
 	pointcut callShowWinner(List<Spot> winStones) : (set(List<Spot> Grid.winningStones) ) && args(winStones);
 	
 	after(List<Spot> winStones): callShowWinner(winStones){
-		if(!stop) {
+		if(!winStones.isEmpty()) {
 			System.out.println("Pierres gagnantes :");
 			for (Spot spot : winStones) {
 				System.out.println("["+spot.x+","+spot.y+"]");
