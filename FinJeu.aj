@@ -1,6 +1,7 @@
 
 import ca.uqac.gomoku.core.Player;
 import ca.uqac.gomoku.core.model.*;
+import java.util.List;
 
 public aspect FinJeu {
 	boolean stop = false;
@@ -17,6 +18,18 @@ public aspect FinJeu {
 	after() returning (boolean retBool): callIsWon() {
 		stop = retBool;
     }
+	
+	pointcut callShowWinner(List<Spot> winStones) : (set(List<Spot> Grid.winningStones) ) && args(winStones);
+	
+	after(List<Spot> winStones): callShowWinner(winStones){
+		if(!stop) {
+			System.out.println("Pierres gagnantes :");
+			for (Spot spot : winStones) {
+				System.out.println("["+spot.x+","+spot.y+"]");
+			}
+		}
+	}
+	
 
 	pointcut callSpotClicked() : call(void *spotClicked(Spot));
 
