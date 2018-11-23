@@ -1,1 +1,2 @@
-gomuku_TP_Aspect
+Gomuku TP Aspect
+(Louis Blasselle, Benoît Manhes, Axel Raffatin)
